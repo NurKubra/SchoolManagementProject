@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data  //@Data bazen memory yani performans ozelliklerini olumsuz etkileyebilir.
 @AllArgsConstructor  //yazmasak da olur zaten @Builder bu isi yapiyor
 @NoArgsConstructor
 @Builder
-public class AdvisoryTeacher { //Userdan extends etmedik
+public class AdvisoryTeacher { //Userdan extends etmedik, bagimisz bir class
 
 
     @Id
@@ -31,7 +32,13 @@ public class AdvisoryTeacher { //Userdan extends etmedik
     @Column(unique = true)
     private String email;
 
-    //not: LessonProgram ve StudentInfo ile ilskilendirilecek
+    //not: student ile ilskilendirme
+    @OneToMany(mappedBy = "advisoryTeacher", cascade = CascadeType.ALL)
+    private List<Student> students;
+
+    //not: LessonProgram ve StudentInfo ile ilskilendirilecek --ilskileri diger tarftan kontrol edecegiz
+
+
 
 
 

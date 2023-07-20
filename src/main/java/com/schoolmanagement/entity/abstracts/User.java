@@ -64,4 +64,13 @@ public abstract class User {  //entity olsun istemiyorum
         @Enumerated(EnumType.STRING)
         private Gender gender;
 
+        //ÖNEMLI NOT:
+        /*
+        @ManyToOne ya da @OneToOne iliskim olmasina ragmen --> one olmaisna ragmen many atamasi yaparsak ne olur?
+        Spring 3.0 a kadar bu duruma bu atamaya izin verir. Hibernate tablolar arasindaki ilsikiyi takip etmez ve izin verir. Biz bunu
+        onlemek icin Uniqie gibi yani tek bir veri(one) atanabilsin diye ozellikler ekleyip kontrol altina aliyoruz. Ama Spring
+        3.0 versiyondan itibaren bunu otomatik yapar ve birden fazla veri atamsina izin vermez --> Exception firlatir.
+        --> bu ozellik sayesinde --> ogretmene ikinci bir ilski atayacagiz (rehber ogretmeni)(onetoone) olmaisna ragmen!!
+        --> ozetle --> onetoone --> onetomany gibi davranir
+         */
 }

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder  //AllArgsConsructor kullanmadim cunku --> SuperBuilder bunu saglar.
 public class Admin extends User {  //User abstract class dan extends ediyorum
 
 

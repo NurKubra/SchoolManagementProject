@@ -1,6 +1,7 @@
 package com.schoolmanagement.entity.concretes.business;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.schoolmanagement.entity.concretes.user.Student;
 import com.schoolmanagement.entity.concretes.user.Teacher;
 import com.schoolmanagement.entity.enums.Note;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder  //herhangi bir yerden extends edilmedigi iicn @builder yeterli
 public class StudentInfo {  //user degil o yuzden extends etmiyoruz
 
     //StudentInfo her ders icin ayri olcak ve bir ogrecinin birden fazla StudentInfo olurken bir StudentInfo bir ogrenciye ait olcak ?
@@ -48,6 +49,14 @@ public class StudentInfo {  //user degil o yuzden extends etmiyoruz
     //Not :Lesson ve EducationTerm ile ilsískilendirilcek
     // EducationTerm --> guz ve yaz donemi
 
+    //EducationTerm ilskisi
+    @OneToOne     //manytoone ??
+    private EducationTerm educationTerm;
+
+    //lesson iliskisi
+    @ManyToOne
+    @JsonIgnoreProperties("lesson") //loopu kirmanin diger bir yolu
+    private Lesson lesson;
 
 
 
