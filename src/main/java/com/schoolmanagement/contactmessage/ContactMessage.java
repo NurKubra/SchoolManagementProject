@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity  //Annotaion'i unique bir id ister!
-@Data  //@Getter, @Setter, @toString, @EqualsAndHashCode (her nesnenin benzersiz bir HashCode'unu hesapliyor,
+@Data    //@Getter, @Setter, @toString, @EqualsAndHashCode (her nesnenin benzersiz bir HashCode'unu hesapliyor,
 //                                                        iki clasii kiyaslar ve icerigindeki kombinasyona gore bir hashcode atar,
 //                                                        iki classda da ayniysa hersey HashCode'lari ayni olarak atar)
 @AllArgsConstructor

@@ -17,8 +17,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class ContactMessageRequest implements Serializable {
- //bu bilgiler client dan aldigim icin Validation yapmaliyim!!
-    //Request
+    //bu bilgiler client dan aldigim icin Validation yapmaliyim!!
+    //Client dan gelen requestlerin java formatina mapplendigi class
 
     @NotNull(message = "Please enter name")
     @Size(min=4,max=16, message = "Your name schould be at least 4 characters")
