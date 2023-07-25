@@ -25,12 +25,9 @@ public class AdvisoryTeacher { //Userdan extends etmedik, bagimisz bir class
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
-    //not : Teacher- Student ile ilsikilendirilecek
+    //not : Teacher iliskisi
     @OneToOne
     private Teacher teacher;
-
-    @Column(unique = true)
-    private String email;
 
     //not: student ile ilskilendirme
     @OneToMany(mappedBy = "advisoryTeacher", cascade = CascadeType.ALL)

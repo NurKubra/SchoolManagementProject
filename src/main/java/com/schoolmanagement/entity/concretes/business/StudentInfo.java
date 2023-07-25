@@ -46,7 +46,6 @@ public class StudentInfo {  //user degil o yuzden extends etmiyoruz
     @Enumerated(EnumType.STRING)
     private Note letterGrade;   //ogrenci harf notlari , AA,BA gibi
 
-    //Not :Lesson ve EducationTerm ile ilsískilendirilcek
     // EducationTerm --> guz ve yaz donemi
 
     //EducationTerm ilskisi

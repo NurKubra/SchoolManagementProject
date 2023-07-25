@@ -25,14 +25,12 @@ public class Student extends User {
     private String fatherName;
     private int studentNumber;
     private boolean isActive;
+
     @Column(unique = true)
     private String email;
 
 
-    //not: StudentInfo, LessonProgram, AdvisoryTeacher, Meet ile ilsikilendirilecek
-
     //lessonProgram ilskisi
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -43,15 +41,15 @@ public class Student extends User {
     private Set<LessonProgram> lessonsProgramList;
 
     //advisoryTeacher ilskilendirmesi
-    @JsonIgnore
+    @JsonIgnore                                //requestin geldigi yerden loop kirilmali
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "advisory_teacher_id")  //oluscak sutun adi
     private AdvisoryTeacher advisoryTeacher;
-
     //NOT :Requestin geldigi yerden loop kirilmali -->@JsonIgnore
 
 
     //Studentinfo ilskisi
+    @JsonIgnore
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<StudentInfo> studentInfos;
 

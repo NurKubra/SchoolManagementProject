@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
+@Builder(toBuilder = true)  //builder() methodunu kullacagimi soyluyorum true yaparak, builder() methodu uzerinden setleme islemi yapmak icin
 public class LessonProgram {
 
     @Id
@@ -26,7 +26,7 @@ public class LessonProgram {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Day day;
+    private Day day;             //haftanin hangi gunleri oldugunu soylemek icin
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
@@ -34,32 +34,38 @@ public class LessonProgram {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
+    //Lesson ile ilski
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "lesson_program_lesson",
-            joinColumns = @JoinColumn(name = "lessonprogram_id"),
-            inverseJoinColumns = @JoinColumn(name = "lesson_id")
+            name = "lesson_program_lesson",                          //oluscak 3. tablonun adi
+            joinColumns = @JoinColumn(name = "lessonprogram_id"),    //2 headeri olcak ve ilk header bu clasin id si
+            inverseJoinColumns = @JoinColumn(name = "lesson_id")     //2. header ilskilendirdigim diger classin id si
     )
-    private Set<Lesson> lessons;
+    private Set<Lesson> lessons;  //derslerin unique olmasi icin set kullandik, eger list olsaydi her ders eklemede kontrol etmeliydik
 
+    //EducationTerm ilskisi --> bir educationTerm icinde birden fazla LessonProgram olabilir
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
-    private Set<Teacher> teachers;
+    //teacher ile ilskisi    --> birden fazla matemetik ogretmeni oldugu icin
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)                  //ogrenci ders programini alirken(okuma islemi yaparken) ogretmenlern de adini gorebilcek
+    @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)  //2.taraf Many iken LAZY calisir-> lessonProgram cektigimizde Teacher'lar gelmez
+    private Set<Teacher> teachers;                                         //ama biz EAGER a cektik bu sayede lessonProgram ile birlikte ogretmenler de gelsin
 
+    //student ile iliski
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
     private Set<Student> students;
 
-    // !!! DB den data silinmeden once yapilmasini istediklerim
-    @PreRemove
+    // !!! DB den data silinmeden once yapilmasini istediklerim (lessonProgram silmek istersem, student ve teacher da da bu lessonProgram silinmeli)
+    @PreRemove  // db den lessonProgram silinmeden bu method caliscak   //hibernate livecylcle
     private void removeLessonProgramFromStudent(){
         teachers.forEach(teacher -> teacher.getLessonsProgramList().remove(this));
         students.forEach(student -> student.getLessonsProgramList().remove(this));
     }
+    //set yapinin icinde dolas, gelen her teacherin getprogramList'ine git ve bu methodu tetikleyen hangi lessonProgramsa onu sil.
+
 
 
 }

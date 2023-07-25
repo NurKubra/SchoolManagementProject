@@ -43,10 +43,12 @@ public class EducationTerm {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastRegistrationDate;
 
+    //lessonProgram ile iliski
     @OneToMany(mappedBy = "educationTerm", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<LessonProgram> lessonProgram;
 
+    //guz doneminde okumata olan ogrencilere ulasmak istersek --> lessonprogram dan ogrencilere ulasabilririm
 
 }
 

@@ -26,7 +26,7 @@ import java.util.Set;
 //parent ve child da da null olan fieldlarin hashcode unu hesaplamaz -->onlyExplicitlyIncluded = true sayesinde
 public class Teacher extends User {
 
-    //bir ogretmen bir rehber ogretmeni olur,
+    //advisoryTeacher ile ilskisi --> bir ogretmen bir rehber ogretmeni olur,
     @OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL,orphanRemoval = true) // "teacher" field'imimn bulundugu classta iliskiyi yonet, Teacher silindiginde ayni zamanda advisorTeacher sa onu da ayni zamanda silmek icin ekledik ikinci kismi, ucuncu kisim--> teacher, ayni zamanda advisorTaecher bu teacheri null a cekersem, null cekilenlerdi silmesi icin
     @JsonIgnore  //advisoryTaecher ile teacher arasinda bir kere dongu olduktan sonra kirmak icin
     private AdvisoryTeacher advisoryTeacher;
@@ -37,7 +37,7 @@ public class Teacher extends User {
     @Column(unique = true)
     private String email;
 
-    //not: lessonProgram ile ilskilendirilecek
+    //not: lessonProgram iliski
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -47,7 +47,7 @@ public class Teacher extends User {
     )
     private Set<LessonProgram> lessonsProgramList;
 
-    //not: StudentInfo ile ilskilendirilcek
+    //not: StudentInfo iliski
     @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;
 

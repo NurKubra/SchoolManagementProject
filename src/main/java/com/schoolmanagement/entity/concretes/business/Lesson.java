@@ -16,7 +16,6 @@ import java.util.Set;
 @Builder
 public class Lesson {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lessonId;
@@ -28,8 +27,9 @@ public class Lesson {
     private Boolean isCompulsory;
 
 
-    //not: lessonProgram iliskilendirilecek  -->
-    //leeson ile ilskilendirmedik ->lessonProgram ile zaten lesson'nin hangi ogretmene ait oldugunu ogrencem o yuzden buraya eklemedik
+    //not: lessonProgram iliskisi
+    //teacher? ile ilskilendirmedik ->lessonProgram ile zaten lesson'nin hangi ogretmene ait oldugunu ogrencem o yuzden buraya eklemedik
+
     @JsonIgnore
     @ManyToMany(mappedBy = "lessons",cascade = CascadeType.REMOVE)  //mesela maetemtik silinirse matematik programi da silinsin
     private Set<LessonProgram> lessonPrograms;
