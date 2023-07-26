@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {  //kendi use
         Student student = studentRepository.findByUsernameEquals(username);
 
         if(student!=null){  //student ise securtynin anlacagci dilde verileri atadik,
-            return new UserDetailsImpl(
+            return new UserDetailsImpl(   //userDetails de olusturudgumuz parametreli const cagriyoruz
                     student.getId(),
                     student.getUsername(),
                     student.getName(),

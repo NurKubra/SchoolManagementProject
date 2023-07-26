@@ -6,6 +6,7 @@ import com.schoolmanagement.payload.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,6 +42,7 @@ public class ContactMessageController {
 
     // not: getAll() ***********************************************************
     @GetMapping("/getAll") // http://localhost:8080/contactMessages/getAll + GET
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<ContactMessageResponse> getAll( // getAll(int page, int size, Direction type)
                                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "10") int size,
@@ -61,6 +63,7 @@ public class ContactMessageController {
 
     // not: searchByEmail() ****************************************************
     @GetMapping("/searchByEmail")  // http://localhost:8080/contactMessages/searchByEmail?email=xxx@yyy.com  +  GET
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')") //method calismadan once yetkilendirmesine bakiyor, rolüne (bu rollerden biriyse bu methodu calsitir)
     public Page<ContactMessageResponse> searchByEmail(
             @RequestParam(value = "email") String email,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -78,6 +81,7 @@ public class ContactMessageController {
 
     // not: searchBySubject() **************************************************
     @GetMapping("/searchBySubject") // http://localhost:8080/contactMessages/searchBySubject?subject=deneme  + GET
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<ContactMessageResponse> searchBySubject(
             @RequestParam(value = "subject") String subject,
             @RequestParam(value = "page", defaultValue = "0") int page,

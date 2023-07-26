@@ -43,11 +43,11 @@ public class SchoolManagementApplication implements CommandLineRunner  {
 
 		}
 		 //!! BuiltIn Admin olusturuyoruz
-		if(adminService.countAllAdmins()==0) {
+		if(adminService.countAllAdmins()==0) {  //aktif olan kac admin var diye sayar once
 			AdminRequest adminRequest = new AdminRequest();
 			adminRequest.setUsername("Admin");
 			adminRequest.setSsn("111-11-1111");
-			//TODO password encode
+			adminRequest.setPassword("12345678");  //burda encode etmeye gerek yok asaidaki saveAdmin() methodu icinde encode edilcek
 			adminRequest.setName("Ahmet");
 			adminRequest.setSurname("soyad");
 			adminRequest.setPhoneNumber("111-111-1111");

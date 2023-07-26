@@ -16,6 +16,7 @@ import com.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -31,6 +32,7 @@ public class AdminService {
     private final AdminMapper adminMapper;                                   //dto -pojo donusumleri icin !!!
     private final UserRoleService userRoleService;
     private final PageableHelper pageableHelper;
+    private final PasswordEncoder passwordEncoder;                           //password encode etmek icin
     public ResponseMessage<AdminResponse> saveAdmin(AdminRequest adminRequest) {  //dönen data typi ResponseMessage<AdminResponse> olarak degistiridk
 
         //AdminRequest de yani dto da username, ssn ve email unique olmali bu kural ayni zamanda tum kullanicilar icin gecerli
@@ -60,11 +62,11 @@ public class AdminService {
         // bu yuzden bu AdminRequest buyuk harfli Admin girildiginde built_in 'i true ya set et dedik.
 
         //!! Admin rolü veriliyor!!
-
         //rol tanimlamasi yapmak icin once db ye gidip kontrol etmem lazim bu rol db de var mi diye
         admin.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));             //enumType da roller var ama UserRole clasi uzerinden atama yapmak
 
-        //todo: Password encode edilecek ..
+        //Password encode etme
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));  //adminRequest.getPassword() --> ayni sey, yani dto ya da pojo farketmez zaten mapleme islemi yappiyoruz
 
        Admin savedAdmin = adminRepository.save(admin);
 
