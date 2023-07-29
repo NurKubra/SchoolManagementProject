@@ -42,7 +42,7 @@ public class ContactMessageController {
 
     // not: getAll() ***********************************************************
     @GetMapping("/getAll") // http://localhost:8080/contactMessages/getAll + GET
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")   //manager --> dean, assistant_manager --> vicedean
     public Page<ContactMessageResponse> getAll( // getAll(int page, int size, Direction type)
                                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "10") int size,

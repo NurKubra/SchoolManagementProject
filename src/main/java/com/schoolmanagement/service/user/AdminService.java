@@ -30,57 +30,60 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final UniquePropertyValidator uniquePropertyValidator;           //injetion islemi yapti, bu class ve methodalrini bu katmanda kullancam
     private final AdminMapper adminMapper;                                   //dto -pojo donusumleri icin !!!
-    private final UserRoleService userRoleService;
-    private final PageableHelper pageableHelper;
+    private final UserRoleService userRoleService;                           //userRole service claisni enjekte ettik
+    private final PageableHelper pageableHelper;                             //page yapisi icin gerekli method
     private final PasswordEncoder passwordEncoder;                           //password encode etmek icin
-    public ResponseMessage<AdminResponse> saveAdmin(AdminRequest adminRequest) {  //dönen data typi ResponseMessage<AdminResponse> olarak degistiridk
 
+
+    //not :save() *******************************************************************
+    public ResponseMessage<AdminResponse> saveAdmin(AdminRequest adminRequest) {
+
+        //dönen data typi ResponseMessage<AdminResponse> olarak degistiridk
         //AdminRequest de yani dto da username, ssn ve email unique olmali bu kural ayni zamanda tum kullanicilar icin gecerli
         //bu yuzden islem normal akisinda devam edip db ye gidip kontrol edersek exception alma ihtimalimiz var,
         //bunun yerine service katmaninda yazdigimiz method ile db ye gidip unique olma durumunu kontrol ediyoruz ve
         //db nin exception'i yerine kendi custom exception'imizi firlatiyoruz.
 
         //!!Girilen Username- ssn-phoneNumber unique mi kontrolu
-        uniquePropertyValidator.checkDuplicate(adminRequest.getUsername(),adminRequest.getSsn(),
-                adminRequest.getPhoneNumber());            //varrags oldugundan girme siram onemli !!, adminRequest deki parametrleri giriyorum kontrol icin
-
-
+        uniquePropertyValidator.checkDuplicate(adminRequest.getUsername(), adminRequest.getSsn(),
+                adminRequest.getPhoneNumber());
+        //varrags oldugundan girme siram onemli !!, adminRequest deki parametrleri giriyorum kontrol icin
         //!!! dto --> POJO   --> bunun icin methodlarimi AdminMapper da yaptik
-
         Admin admin = adminMapper.mapAdminRequestToAdmin(adminRequest);    //pojo doncek ama bazi veriler eksik mesela built_in
         admin.setBuilt_in(false);  //diger adminler icin built_in false, default da false olsun ki her onune gelen user admin olmasin
 
-        if(Objects.equals(adminRequest.getUsername(), "Admin")) {       //eger username "Admin" ise built_in ni true ya set et!!
+        if (Objects.equals(adminRequest.getUsername(), "Admin")) {       //eger username "Admin" ise built_in ni true ya set et!!
             admin.setBuilt_in(true);
         }
-
         //bir admin yeni admin creat edebilir--> username'i Admin yazarak ilk defa varsa admin olarak atayabilir--> ama bunu istemiyoruz
         //degistirilebilir olsun istemiyorum bu yuzden runner kisminda bu durumu engelleyecegiz ve sadece bir adminin bunu degistirmesine izin vercez
-
         //db de roles tablosunda henuz roller yok --> bu yuzden uygulamyi calistirdgimiz anda role tablosunu doldur ve
         //built_in e admini ata.  //coreJava kisminda rollerim var ama db ksiminda atanmamis.
         // bu yuzden bu AdminRequest buyuk harfli Admin girildiginde built_in 'i true ya set et dedik.
 
         //!! Admin rolü veriliyor!!
         //rol tanimlamasi yapmak icin once db ye gidip kontrol etmem lazim bu rol db de var mi diye
-        admin.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));             //enumType da roller var ama UserRole clasi uzerinden atama yapmak
-
+        //enumType da roller var ama UserRole clasi uzerinden atama yapmak
+        admin.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));
         //Password encode etme
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));  //adminRequest.getPassword() --> ayni sey, yani dto ya da pojo farketmez zaten mapleme islemi yappiyoruz
-
-       Admin savedAdmin = adminRepository.save(admin);
-
-       //ResponseMessage nesnesi olusturuluyor   --> basarili mesaji (ErrorMessages da olsuturudk) (Controller daki responseMessage  )
+        Admin savedAdmin = adminRepository.save(admin);
+        //ResponseMessage nesnesi olusturuluyor
         return ResponseMessage.<AdminResponse>builder()
                 .message(SuccessMessages.ADMIN_CREATE)
-                .object(adminMapper.mapAdminToAdminResponse(savedAdmin))
+                .object(adminMapper.mapAdminToAdminResponse(savedAdmin))  //pojo--> dto ya cevirme
                 .build();
 
-    }
+    }   //--> basarili mesaji (ErrorMessages da olsuturudk) (Controller daki responseMessage)
+        //statuscode'u conttroller da ResponseEntity olarak dondu
+
+
+
+
 
     //Not: getAll() *****************************************************
     public Page<Admin> getAllAdminsByPage(int page, int size, String sort, String type) {
-        Pageable pageable= pageableHelper.getPageableWithProperties(page,size,sort,type);
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
         return adminRepository.findAll(pageable);
 
     }
@@ -88,25 +91,26 @@ public class AdminService {
 
     //Not: delete() ********************************************************
     public String deleteAdminById(Long id) {
-        //!!! id kontrol
+        //!!! id kontrol (db de var mi diye)
         Optional<Admin> admin = adminRepository.findById(id); //optional yapida donmeye musaede eder, nullpoitexception alma diye
 
+        //Optional admin ici bos olsa da create edilebilir bu yuzden bakmak lazim ici bos mu diye
         //ama bu seferde optinal olanin ici bos mu diye bakmamiz lazim
-        if(admin.isEmpty()){  //null sa exception firlat
-            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,id));
-        } else if (admin.get().isBuilt_in()) {  //optional yapida calistigi icin normal bir nesneye ulasir gibi ulasmadik
+        if (admin.isEmpty()) {  //null sa exception firlat
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, id));
+        } else if (admin.get().isBuilt_in()) {  //optional yapida calistigi icin normal bir nesneye ulasir gibi ulasmadik (get() ile aldik)
             throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }// built_in ile annnote edilen admin silinmemeli, bunu kontrol ettik
 
         adminRepository.deleteById(id);
-        return  SuccessMessages.ADMIN_DELETE;
+        return SuccessMessages.ADMIN_DELETE;
 
 
     }
 
     //not: RUNNER Tarafi icn yazdik --> aktif olan kac admin var diye sayar
 
-    public long countAllAdmins(){
+    public long countAllAdmins() {
         return adminRepository.count();
     }
 }

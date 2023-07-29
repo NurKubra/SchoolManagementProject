@@ -15,4 +15,8 @@ public class SuccessMessages {
 
     public static final String DEAN_SAVE = "Dean is Saved Successfully";
 
+    public static final String DEAN_UPDATE = "Dean is Updated Successfully";
+
+    public static final String DEAN_DELETE = "Dean is Deleted Successfully";
+
 }

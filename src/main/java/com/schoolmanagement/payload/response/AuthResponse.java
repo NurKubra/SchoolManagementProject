@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AuthResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)   //yani null olmayan, girilmeyen degerler null oldugu icin onlari kullaniciya donemyecek
+public class AuthResponse {   //login islemi sonrasi authenticate edilmis kullanicinin dönen bilgileri
 
     private String username;
     private String ssn;

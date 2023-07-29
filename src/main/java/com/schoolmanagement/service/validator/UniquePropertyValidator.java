@@ -1,10 +1,17 @@
 package com.schoolmanagement.service.validator;
 
+import com.schoolmanagement.entity.abstracts.User;
+import com.schoolmanagement.entity.concretes.user.Dean;
+import com.schoolmanagement.entity.concretes.user.Student;
+import com.schoolmanagement.entity.concretes.user.Teacher;
 import com.schoolmanagement.exception.ConflictException;
 import com.schoolmanagement.payload.messages.ErrorMessages;
+import com.schoolmanagement.payload.request.DeanRequest;
+import com.schoolmanagement.payload.request.StudentRequest;
+import com.schoolmanagement.payload.request.TeacherRequest;
+import com.schoolmanagement.payload.request.abstracts.BaseUserRequest;
 import com.schoolmanagement.repository.user.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component                   //  Bean olusturuyoruz kii service katmaninda kullanabilelim  !!
@@ -17,6 +24,63 @@ public class UniquePropertyValidator {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final ViceDeanRepository viceDeanRepository;
+
+    //iki deger birbirine esit degilse yani requesten gelen ile db deki o zaman setle yoksa degismesin
+    // bu method tum app icin evrensel hale geldi(Abstract classlari paarametre olarak girdigimiz icin )
+    //update den gelen ile db deki deger ayni degilse requesten gelen degerle setle dedik
+    //teacher ve student da extradan email oldugu icin teacher ya da student degilse yalnizca 3 paramtreyi al
+    // yoksa 4 paramtreyi al
+    public void checkUniqueProperties(User user, BaseUserRequest baseUserRequest){
+
+        String updatedUsername = "";
+        String updatedSsn = "";
+        String updatedPhone = "";
+        String updatedEmail = "";
+
+        if(!user.getUsername().equalsIgnoreCase(baseUserRequest.getUsername())) {
+            updatedUsername = baseUserRequest.getUsername();
+        }
+
+        if(!user.getSsn().equalsIgnoreCase(baseUserRequest.getSsn())){
+            updatedSsn = baseUserRequest.getSsn();
+        }
+
+        if(!user.getPhoneNumber().equalsIgnoreCase(baseUserRequest.getPhoneNumber())){
+            updatedPhone = baseUserRequest.getPhoneNumber();
+        }
+
+        boolean teacherOrStudent = false ;
+
+        if(user instanceof Teacher && baseUserRequest instanceof TeacherRequest){  //gelen paramtrelerin teachera ait  olup olmadigini kontrol ettik
+            Teacher teacher = (Teacher) user;                                      //true ise yukardaki paarmtreleri teacher icin olan formatlara donusturduk(cast islemi)
+            TeacherRequest teacherRequest = (TeacherRequest) baseUserRequest;
+            teacherOrStudent = true;
+            if(!teacher.getEmail().equalsIgnoreCase(teacherRequest.getEmail())){
+                updatedEmail = teacherRequest.getEmail();
+            }
+        }
+
+        if(user instanceof Student && baseUserRequest instanceof StudentRequest){   //bu methodu tetikleye user'in rolünü tespit ediyor
+            Student student = (Student) user;                                       //parent dan child a giderken java otomatik yapmiyor bu yuzden casti biz yaptik
+            StudentRequest studentRequest = (StudentRequest) baseUserRequest;
+            teacherOrStudent = true;
+            if(!student.getEmail().equalsIgnoreCase(studentRequest.getEmail())){
+                updatedEmail = studentRequest.getEmail();
+            }
+
+        }
+        if(teacherOrStudent) {
+            checkDuplicate(updatedUsername,updatedSsn,updatedPhone,updatedEmail);
+        } else {
+            checkDuplicate(updatedUsername,updatedSsn,updatedPhone);
+        }
+    }
+        //degerler setlenmek isteniyorsa setlensin yoksa hiclik olarak kalsin degismesin
+        //Dean icin ilk 3 field yeterli ama teacher veya student gelirse email de oldugu icin onlari da kontrol etmem lazim
+        //bu methodu tetikleyen user teacher mi diye kontrol ettik oyleyse o zaman gelen degerle var olan deger farkli ise
+        //o zaman setleme islemi yap
+
+       //soru ?? ---> yine ayni methodu kullanmis olmuyor muyuz neden extra bir method yazdik, dolayli olarak yine db ye gitmedi mi
 
     public void checkDuplicate(String... values) {
 

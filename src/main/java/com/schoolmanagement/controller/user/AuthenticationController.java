@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController {  //login islemi icin !!! --> bu sayede token olusacak
 
     private final AuthenticationService authenticationService;
 
@@ -26,4 +26,6 @@ public class AuthenticationController {
 
         return authenticationService.authenticateUser(loginRequest);
     }
+
+    //kullaniciya token ile birlikte 
 }

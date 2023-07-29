@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class LoginRequest { //login yaparken kullanicidan gelen request
 
     @NotNull(message = "username mustn't be empty")
     private String username;

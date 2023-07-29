@@ -16,10 +16,10 @@ public class UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
 
-    public UserRole getUserRole(RoleType roleType){ //RoleType data tpinde bir data gelcek enum icindekilerden biri
+    public UserRole getUserRole(RoleType roleType){ //RoleType data tpinde bir data gelcek enum icindekilerden biri, su rolü bul getir yoksa exception
         return userRoleRepository.findByEnumRoleEquals(roleType).orElseThrow(() ->
         new ConflictException(ErrorMessages.ROLE_NOT_FOUND));   //db de bu rolüm varsa la getir bu method bu yuzden yazdik, bulamazsa exception ile bizim
-                                                                // mesajimizi yayinlar
+                                                                // mesajimizi yayinlar, donen data type i optional yaptik (repoda)
     }
 
     //!!rol tablosunu doldurcam oncesinde bos mu diye kontrol etmek icin methodumu yazdim

@@ -12,11 +12,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.time.LocalDate;
 
 @SpringBootApplication
-public class SchoolManagementApplication implements CommandLineRunner  {
+public class SchoolManagementApplication implements CommandLineRunner  {  //run methodu override ediliyor, application calismadan bu method calissin
 	private final UserRoleService userRoleService;
 	private final AdminService adminService;
 
-	//@RequiredArgsConstructor yerine Paramtreli constructor kullandik
+	//@RequiredArgsConstructor yerine Paramtreli constructor kullandik !! bu sekilde injektion yaptik
 	public SchoolManagementApplication(UserRoleService userRoleService, AdminService adminService) {
 		this.userRoleService = userRoleService;
 		this.adminService = adminService;

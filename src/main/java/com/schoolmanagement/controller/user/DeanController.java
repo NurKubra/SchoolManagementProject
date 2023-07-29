@@ -6,17 +6,21 @@ import com.schoolmanagement.payload.response.DeanResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.service.user.DeanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/dean")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN')")   //sadece Admin silebilsin
 public class DeanController {
+    //Authorite vermek icin her method basina da yazabilirim , class seviyesinde de yapabilirm
+    //burda class seviyesinde yaptik
+
+
+
 
 
     private final DeanService deanService;
@@ -28,4 +32,28 @@ public class DeanController {
     return deanService.save(deanRequest);
 
     }
+
+
+    // not: updateById() ********************************************
+    @PutMapping("/update/{userId}")  //http://localhost:8080/dean/update/1  + PUT
+    public ResponseMessage<DeanResponse> update(@RequestBody @Valid DeanRequest deanRequest,  //degisikleri tasiyan obje
+                                                @PathVariable Long userId){        //aranan id yi tasiyan obje
+        return deanService.update(deanRequest,userId);
+        //paramtre icinde yeni gircegimiz degerleri ve id ile aramak istedigim icin pathvariable yazdim
+
+    }
+
+    //sadece update ettigim kisimlar degissin digerleri eskisi gibi kalsin istersem --> PatchMapping
+    // eger fieldlarin tamaini update etceksek PutMapping setlenmeyen tum fiedllar null gecer--> dolu bile olsa update edilmezse null olarak degisir
+    // bu buzden tum fieldlaeri setlememiz lazim (dto-> pojo donusumleri sirasinda mapper clasinda !!)
+
+
+    //not : Delete() ***************************************************
+    @DeleteMapping("/delete/{userId}") // http://localhost:8080/dean/delete/1  + DELETE
+    public ResponseMessage<?> deleteDeanById(@PathVariable Long userId){  //responseMessage icinde message zaten var, sildigimiz objeyi donmeyecgiz bu yuzden bos biraktik
+
+        return deanService.deleteDeanById(userId);
+    }
+
+
 }

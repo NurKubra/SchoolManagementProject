@@ -2,14 +2,20 @@ package com.schoolmanagement.payload.mappers;
 
 
 import com.schoolmanagement.entity.concretes.user.Dean;
+import com.schoolmanagement.entity.enums.RoleType;
 import com.schoolmanagement.payload.request.DeanRequest;
 import com.schoolmanagement.payload.response.DeanResponse;
+import com.schoolmanagement.service.user.UserRoleService;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
+@RequiredArgsConstructor
 public class DeanMapper {
+
+    private final UserRoleService userRoleService;
 
 
     //!! DTO --> POJO
@@ -27,7 +33,7 @@ public class DeanMapper {
                 .build();
     }
 
-    //!! POJO --> DTO
+
     // !!! POJO --> DTO
     public DeanResponse mapDeanToDeanResponse(Dean dean){
         return DeanResponse.builder()
@@ -43,5 +49,25 @@ public class DeanMapper {
                 .build();
     }
 
+    //!! DTO --> POJO (Update)  yukardaki methoda id bilgisi olmadigi icin kullanamiyorum ,id ve userRole setledim !!
+                                //gelen requestimde id bilgisi oldugu ve rolu belli oldugu icin
+
+    public Dean mapDeanRequestToUpdatedDean(DeanRequest deanRequest, Long managerId) {
+
+        return Dean.builder()
+                .id(managerId)
+                .username(deanRequest.getUsername())
+                .name(deanRequest.getName())
+                .surname(deanRequest.getSurname())
+                .password(deanRequest.getPassword())
+                .ssn(deanRequest.getSsn())
+                .birthDay(deanRequest.getBirthDay())
+                .birthPlace(deanRequest.getBirthPlace())
+                .phoneNumber(deanRequest.getPhoneNumber())
+                .gender(deanRequest.getGender())
+                .userRole(userRoleService.getUserRole(RoleType.MANAGER))
+                .build();
+
+    }
 }
 
