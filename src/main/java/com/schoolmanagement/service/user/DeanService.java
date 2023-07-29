@@ -10,11 +10,17 @@ import com.schoolmanagement.payload.request.DeanRequest;
 import com.schoolmanagement.payload.response.DeanResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.repository.user.DeanRepository;
+import com.schoolmanagement.service.helper.PageableHelper;
 import com.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,7 @@ public class DeanService {
     private final DeanMapper deanMapper;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
+    private final PageableHelper pageableHelper;
 
 
     // not:save() *********************************************************************
@@ -78,6 +85,7 @@ public class DeanService {
     private Dean isDeanExist(Long deanId){
         return deanRepository.findById(deanId).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,deanId)));
+        //eger aradigimiz id li kullanici yoksa ResourceNotFoundException firlattir!!
 
     }
     //Optional yapilar ya ici dolu mu diye kontrol edilir ya da orElseThrow ile kontrol edilir (Dean döndürür)
@@ -102,4 +110,32 @@ public class DeanService {
 
     }
 
+    // Not :  getById() **************************************************************
+    public ResponseMessage<DeanResponse> getDeanById(Long deanId) {
+        // Dean dean = isDeanExist(deanId);    //varsa idli dean getir yoksa exception
+        return ResponseMessage.<DeanResponse>builder()
+                .message(SuccessMessages.DEAN_FOUND)
+                .httpStatus(HttpStatus.OK)
+                .object(deanMapper.mapDeanToDeanResponse(isDeanExist(deanId)))  //pojo yu alip response cevircek "isDeanExist(deanId)" kalibi direk verdik geriye pojo dean objesini dondugunu bildigim icin
+                .build();
+
+    }
+
+    // Not :  getAll() ***************************************************************
+    public List<DeanResponse> getAllDeans() {
+        return deanRepository.findAll() // List<Dean> ;db de tum deanler geliyor collection yapida
+                .stream()  // Stream<Dean> ; akis degisti collection lardan Stream e dondu
+                .map(deanMapper::mapDeanToDeanResponse) // Stream<DeanResponse>  ; pojo --> dto yukardan gelen her dean akis olara burda yazdigim methodun parametresien yaziliyor
+                .collect(Collectors.toList());          //yapiyi liste cevirdik tekrardan
+    }
+
+
+    // Not :  getAllDeansByPage() ****************************************************
+    public Page<DeanResponse> getAllDeansByPage(int page, int size, String sort, String type) {
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type); //pagebaleHepler injekte ettim
+
+        return deanRepository.findAll(pageable).map(deanMapper::mapDeanToDeanResponse); //findAll() pageable bir obje aliyor ve map ile pojo --> dto donusturduk --> burdaki map() streamin degil
+
+    }
 }
