@@ -11,13 +11,21 @@ import com.schoolmanagement.payload.request.ViceDeanRequest;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.payload.response.ViceDeanResponse;
 import com.schoolmanagement.repository.user.ViceDeanRepository;
+import com.schoolmanagement.service.helper.PageableHelper;
 import com.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +37,7 @@ public class ViceDeanService {
     private final ViceDeanMapper viceDeanMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
+    private final PageableHelper pageableHelper;
 
 
     // Not :  Save() *************************************************************************
@@ -85,4 +94,60 @@ public class ViceDeanService {
     }
 
     //isPresent() ici dolu mu diye bakar
+
+
+    // Not :  Delete() *************************************************************************
+    public ResponseMessage deleteViceDeanByUserId(Long viceDeanId) {
+
+        isViceDeanExist(viceDeanId);
+        viceDeanRepository.deleteById(viceDeanId);
+
+        return ResponseMessage.builder()      //generic yapiyi kullanamyacaiz o yuzden direk setleme islemi yaptik
+                .message(SuccessMessages.VICE_DEAN_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+        //not --> bu methoda isExistId yi kontrol etmeden sistemde kayitli olmayan bir idli kisiyi silmek istedgimizde 500 yani server
+        // hatasi aldik --> ama bu yaniltici bir hata--> bu yuzden isViceDeanExisst ekledik !!
+
+    // Not :  getById() ************************************************************************
+    public ResponseMessage<ViceDeanResponse> getViceDeanByViceDeanId(Long viceDeanId) {
+
+        return ResponseMessage.<ViceDeanResponse>builder()
+                .message(SuccessMessages.VICE_DEAN_FOUND)
+                .httpStatus(HttpStatus.OK)
+                .object(viceDeanMapper.mapViceDeanToViceDeanResponse(isViceDeanExist(viceDeanId).get()))
+                .build();
+
+
+        //bu methodda geriye bir dto objesi dondurmem lazim bunu direk object icinde yapmak istiyorum
+        //pojo yu dto ya cevirebilmk icin elimde bulunan methodu cagriyorum
+        // bu method icinde oncelikle bu id ye shaip kullanicim var mi diye kontrol etmem lazim
+        // isExist ile kontrol ediyorum fakat isExist bana Opzional bir veri donurdugu icin get() methodunu cagiriyorum
+        //bu sayede Optional<viceDean> icindeki pojo objesine ulasbailirm !!
+    }
+
+
+    // Not :  getAll() *************************************************************************
+    public List<ViceDeanResponse> getAllViceDeans() {
+
+        return viceDeanRepository.findAll() // List<ViceDean> (pojo donuyor bu method)
+                .stream() // Stream<ViceDean>
+                .map(viceDeanMapper::mapViceDeanToViceDeanResponse) // Stream<ViceDeanResponse> (streamden donen pojolari dto ya cevirdik ama hala stream halde )
+                .collect(Collectors.toList()); // List<ViceDeanResponse>  (streami List e ceviridk)
+    }
+
+
+    // Not :  getAllWithPage() ******************************************************************
+    public Page<ViceDeanResponse> getAllViceDeanByPage(int page, int size, String sort, String type) {
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort,type);
+
+        return viceDeanRepository.findAll(pageable).map(viceDeanMapper::mapViceDeanToViceDeanResponse);
+        //pagebale yapiyi map ile pojo --> dto ya cevirdik
+    }
+
+
+
+
 }
