@@ -24,7 +24,7 @@ public class Lesson {
 
     private Integer creditScore;
 
-    private Boolean isCompulsory;
+    private Boolean isCompulsory;   //zorunlu bir ders mi
 
 
     //not: lessonProgram iliskisi
