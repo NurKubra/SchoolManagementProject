@@ -8,8 +8,33 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
-
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Lesson {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long lessonId;
+
+    private String lessonName;
+
+    private Integer creditScore;
+
+    private Boolean isCompulsory;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "lessons", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<LessonProgram> lessonPrograms;
+
+}
+
+
+
+
+/*@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,4 +60,4 @@ public class Lesson {
     private Set<LessonProgram> lessonPrograms;
 
 
-}
+}*/

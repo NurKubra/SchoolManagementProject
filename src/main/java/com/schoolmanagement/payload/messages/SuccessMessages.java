@@ -40,4 +40,24 @@ public class SuccessMessages {
 
     public static final String EDUCATION_TERM_UPDATE = "Education Term is Updated Successfully";
 
+    // !!! Lesson
+
+    public static final String LESSON_SAVE = "Lesson is Saved Successfully";
+
+    public static final String LESSON_DELETE = "Lesson is Deleted Successfully";
+
+    public static final String LESSON_FOUND = "Lesson is Found Successfully";
+
+
+    // !!! LessonProgram
+    public static final String LESSON_PROGRAM_SAVE = "Lesson Program is Saved Successfully";
+
+
+
+
+
+
+
+
+
 }

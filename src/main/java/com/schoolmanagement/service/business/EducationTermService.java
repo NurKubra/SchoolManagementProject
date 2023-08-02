@@ -134,6 +134,11 @@ public class EducationTermService {
                 .build();
 
     }
+
+    // Not: LessonProgramService icin yazildi
+    public EducationTerm getEducationTermById(Long id){
+        return isEducationTermExist(id);
+    }
 }
 
 
