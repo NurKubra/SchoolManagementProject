@@ -106,10 +106,23 @@ public class LessonService {
         return lessonRepository.findAll(pageable).map(lessonMapper::mapLessonToLessonResponse);
     }
 
-  // Not: getLessonsByIdList() *******************************************************************
+  /*// Not: getLessonsByIdList() *******************************************************************
     public Set<Lesson> getLessonByLessonIdSet(Set<Long> lessons) {
 
         return lessonRepository.getLessonByLessonIdList(lessons);
+
+    }*/
+
+    // Not: getLessonsByIdList() *******************************************************************
+    public Set<Lesson> getLessonByLessonIdSet(Set<Long> idSet) {
+
+
+        //  return lessonRepository.getLessonByLessonIdList(lessons);
+
+        return idSet.stream()
+                .map(this::isLessonExistById)
+                .collect(Collectors.toSet());
+
     }
 
 

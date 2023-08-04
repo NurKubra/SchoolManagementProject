@@ -52,6 +52,7 @@ public class SuccessMessages {
     // !!! LessonProgram
     public static final String LESSON_PROGRAM_SAVE = "Lesson Program is Saved Successfully";
 
+    public static final String LESSON_PROGRAM_DELETE = "Lesson Program is Deleted Successfully";
 
 
 
