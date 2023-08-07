@@ -44,3 +44,12 @@ public class ContactMessageRequest implements Serializable {
     private String message;
 
 }
+/*
+ "Serializable" arayüzünü bir sınıfa eklemek, nesnelerin durumlarını farklı veri biçimlerine dönüştürüp geri
+ yükleyebilmenizi sağlayarak uygulama geliştirmeyi daha esnek ve verimli hale getirir. Ancak,
+ sınıfların serileştirilebilir olması, uygun bir şekilde dikkate alınması
+ve güvenliğin göz önünde bulundurulması gereken bazı önemli hususları beraberinde getirir.
+
+regexp = "\\A(?!\\s*\\Z).+"-->
+Bu ifade, metnin başlangıcında boşluk veya yeni satırların olmadığı ve en az bir karakter içerdiği durumları kabul eder.
+ */

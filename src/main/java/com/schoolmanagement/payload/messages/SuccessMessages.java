@@ -55,6 +55,15 @@ public class SuccessMessages {
     public static final String LESSON_PROGRAM_DELETE = "Lesson Program is Deleted Successfully";
 
 
+    //!!! Teacher
+    public static final String TEACHER_SAVE = "Teacher is Saved Successfully";
+
+    public static final String TEACHER_DELETE = "Teacher is Deleted Successfully";
+
+    public static final String TEACHER_FOUND = "Teacher is Found Successfully";
+
+    public static final String TEACHER_UPDATE = "Teacher is Updated Successfully";
+
 
 
 

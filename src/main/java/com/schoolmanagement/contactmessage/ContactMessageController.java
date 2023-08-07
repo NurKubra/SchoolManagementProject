@@ -20,9 +20,6 @@ public class ContactMessageController {
     private final ContactMessageService contactMessageService;
 
 
-
-
-
     // not: save()************************************************************
     @PostMapping("/save")  // http://localhost:8080/contactMessages/save    + POST  //anoim bir kullanici da mesaj gonderebilsin diye sadece save yazdik
     public ResponseMessage<ContactMessageResponse> save(@RequestBody

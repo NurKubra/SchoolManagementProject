@@ -58,8 +58,12 @@ public class LessonProgramController {
     @GetMapping("/getAllUnassigned")  // http://localhost:8080/lessonPrograms/getAllUnassigned  + GET
     public List<LessonProgramResponse> getAllUnassigned() {
 
-        return lessonProgramService.getAllLessonProgramUnassigned();  //method ismnini kontrolet !!!!
+        return lessonProgramService.getAllLessonProgramUnassigned();
     }
+    //ogretmen atanmamis derslerin programlarini getir, LessonProgram gelcek ama teacher kismi null olanlar gelcek
+    //teacher ile setlenmemis lessonlari
+
+
 
 
     // Not : getAllLessonProgramAssigned() **************************************************
@@ -69,6 +73,8 @@ public class LessonProgramController {
 
         return lessonProgramService.getAllAssigned();
     }
+    //ogretmen atamasi yapilmis dersler
+
 
 
 
@@ -77,7 +83,9 @@ public class LessonProgramController {
     @DeleteMapping("/delete/{id}")  // http://localhost:8080/lessonPrograms/delete/2  + DELETE
     public ResponseMessage deleteLessonProgramById(@PathVariable Long id){
         return lessonProgramService.deleteLessonProgramById(id);
-    }
+    } //mesaj gondercegimiz icin ResponseMessage
+
+
 
 
     // Not :  getAllWithPage() ***************************************************************
@@ -93,14 +101,26 @@ public class LessonProgramController {
     }
 
 
+
+
     // Not : getLessonProgramByTeacher() *****************************************************
     @PreAuthorize("hasAnyAuthority('TEACHER')")
     @GetMapping("/getAllLessonProgramByTeacher") // http://localhost:8080/lessonPrograms/getAllLessonProgramByTeacher  + GET
     public Set<LessonProgramResponse> getAllLessonProgramByTeacherUserName(HttpServletRequest httpServletRequest){
 
-        return lessonProgramService.getAllLessonProgramByTeacher(httpServletRequest);
+        return lessonProgramService.getAllLessonProgramByTeacher(httpServletRequest);   //hangi teacher oldugunu request uzerinden aldik
+
     }
+
+
+    //bu methodu tetikleybilmek icin Teacher'in login olmasi lazim, ama teacherin unique bir ozelligi gerekiyor, bu yuzden
+    //bu requesti gonderen kullanicinin unique bir fieldi yani username'ini atribute uzerinden alcam bu sayede hangi teacher oldugunu anlayacak
+    //request uzerinden username i alcagimiz icin HttpServletRequest uzeriden alabiliirz
+    //(requestin atribute ya da headerin dan bir veri almak istersem bu classi parametre olarak  kullanam lazim)
     //bana gelen requestin icinden ihtiyacim olan kismi aliyorum
+    //hasAuthority('')--> bir tane atayabilirz ; hasAnyAuthority('','')--> birden fazla atayabilirz
+
+
 
 
     // Not :  getLessonProgramByStudent() *****************************************************

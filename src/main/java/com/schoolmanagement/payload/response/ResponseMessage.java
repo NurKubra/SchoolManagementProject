@@ -19,4 +19,5 @@ public class ResponseMessage<E> {           //generic data tipinde // RESPONSE o
     private E object;
     private String message;
     private HttpStatus httpStatus;
+
 }

@@ -84,7 +84,7 @@ public class LessonProgramService {
 
 
 
-    // Not : getAllLessonProgramUnassigned() ************************************************ //ogretmen atamsi yapilmamis ders programi
+    // Not : getAllLessonProgramUnassigned() ************************************************
     public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
 
         return lessonProgramRepository.findByTeachers_IdNull() // List<LessonProgram>
@@ -92,6 +92,11 @@ public class LessonProgramService {
                 .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+    //ogretmen atamsi yapilmamis ders programi
+    //not : manytomany ilskisi olan tablolardan 3 bir tablo olusuyor verileri ordan aliyoruz ?
+
+
+
 
     // Not : getAllLessonProgramAssigned() **************************************************
     public List<LessonProgramResponse> getAllAssigned() {
@@ -101,6 +106,10 @@ public class LessonProgramService {
                 .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+
+
+
+
     // Not : Delete() ***********************************************************************
     public ResponseMessage deleteLessonProgramById(Long id) {
         //id kontrolü;
@@ -113,6 +122,8 @@ public class LessonProgramService {
                 .build();
 
     }
+
+
     // Not :  getAllWithPage() ***************************************************************
     public Page<LessonProgramResponse> getAllLessonProgramByPage(int page, int size, String sort, String type) {
 
@@ -124,8 +135,9 @@ public class LessonProgramService {
 
     // Not : getLessonProgramByTeacher() *****************************************************
     public Set<LessonProgramResponse> getAllLessonProgramByTeacher(HttpServletRequest httpServletRequest) {
-        // Request uzerinden login olan kullanicinin username bilgisini aliyorum
-        String userName = (String) httpServletRequest.getAttribute("username");
+        // Request uzerinden login olan kullanicinin username bilgisini aliyorum (attribute uzerinden aliyoruz )
+        String userName = (String) httpServletRequest.getAttribute("username");  //object bir data gonderdigi icin Stringe cast ettik
+        //bu teacher in username'ini alma sebebimiz varligini kontrol etmek degil bu teacherin LessonProgramina ulasmak
         return lessonProgramRepository.getLessonProgramByTeacherUsername(userName) // Set<LessonProgram>
                 .stream()
                 .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse) // Stream<LessonProgramResponse>
@@ -143,7 +155,29 @@ public class LessonProgramService {
                 .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
                 .collect(Collectors.toSet());
     }
-    //authTokenFilter clasinda doFilterInternal() methodunda username'i setledigimiz icin burda aktif login olan kullanicinin username'ni cagirabildim
+    //!!! authTokenFilter clasinda doFilterInternal() methodunda username'i setledigimiz icin
+    //burda aktif login olan kullanicinin username'ni get() ile cagirabildim
+
+
+
+    // Not: TeacherService de kullanildi
+    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonIdSet){
+
+        Set<LessonProgram> lessonPrograms = lessonProgramRepository.getLessonProgramByLessonProgramByIdList(lessonIdSet);
+
+        if(lessonPrograms.isEmpty()) {
+            throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO);
+        }
+
+        return lessonPrograms;
+
+        //repoda yazdigimiz methodda gonderdgimiz id'lerin db olmamasi durumda oluscak excption'i handel ettik
+
+        /* // Alternatif kod
+                lessonIdSet.forEach(this::isLessonProgramExistById);
+         */
+
+    }
 
 
 }

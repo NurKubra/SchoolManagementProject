@@ -52,6 +52,10 @@ public class ErrorMessages { //Application'inin herhangi bir yerinde kullancagim
 
     public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE = "Error: Lesson Program not found with id %s";
 
+    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO = "Error: Lesson Program not found with this field";
+
+    public static final String LESSON_PROGRAM_ALREADY_EXIST = "Error: Course schedule can't be selected for the same hour and date";
+
 
 
 }

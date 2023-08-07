@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EducationTermMapper {
 
-// not : bu class da @Builder(toBuilder=true ) yu burda kullancagiz --> yani burdaki ilk methodu kolonlayip asagida kullandik
+// not : bu class da @Builder(toBuilder=true ) yu burda kullancagiz --> yani burdaki ilk methodu klonlayip asagida kullandik
+// Builder ile constructor'a sonradan parametre eklemeyi saglar ve new'lemeye gerek kalmaz!! -- toBuilder= true ile atanan class static gibi davranir
 // !!! DTO --> POJO
 public EducationTerm mapEducationTermRequestToEducationTerm(EducationTermRequest educationTermRequest) {
     return EducationTerm.builder()
@@ -35,8 +36,8 @@ public EducationTerm mapEducationTermRequestToEducationTerm(EducationTermRequest
     // !!! Update icin DTO --> POJO
     public EducationTerm mapEducationTermRequestToUpdatedEducationTerm(Long id, EducationTermRequest educationTermRequest){
         return mapEducationTermRequestToEducationTerm(educationTermRequest)
-                .toBuilder()
-                .id(id)
+                .toBuilder()  //yukardaki objeyi degil onun fieldleriyla ayni olan objeyi klonlayacgim
+                .id(id)       //bu kullanidigm objeye id yi ekledim !
                 .build();
     }
 

@@ -107,7 +107,7 @@ public class LessonService {
     }
 
   /*// Not: getLessonsByIdList() *******************************************************************
-    public Set<Lesson> getLessonByLessonIdSet(Set<Long> lessons) {
+    public Set<Lesson> getLessonByLessonIdSet(Set<Long> lessons) {  //burda neden lessons kullanidk ?? contoller de idSet iken
 
         return lessonRepository.getLessonByLessonIdList(lessons);
 

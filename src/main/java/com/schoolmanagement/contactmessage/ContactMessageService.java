@@ -17,6 +17,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ContactMessageService {
     private final ContactMessageRepository contactMessageRepository;
+
+
     public ResponseMessage<ContactMessageResponse> save(ContactMessageRequest contactMessageRequest) {
         // 1 kullanici 1 gunde sadece 1 mesaj atabilsin
         boolean isSameMessageWithSameEmailForToday =
