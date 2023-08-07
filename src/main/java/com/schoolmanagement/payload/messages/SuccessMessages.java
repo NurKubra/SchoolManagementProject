@@ -64,6 +64,18 @@ public class SuccessMessages {
 
     public static final String TEACHER_UPDATE = "Teacher is Updated Successfully";
 
+    public static final String LESSON_PROGRAM_ADD_TO_TEACHER = "Lesson Programs added to Teacher Successfully";
+
+    //!!! AdvisoryTeacher
+    public static final String ADVISOR_TEACHER_DELETE = "Advisor Teacher is Deleted Successfully";
+
+
+
+
+
+
+
+
 
 
 

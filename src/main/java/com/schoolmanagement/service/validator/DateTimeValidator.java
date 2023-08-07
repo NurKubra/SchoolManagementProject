@@ -64,7 +64,12 @@ public class DateTimeValidator {
     }  //burda iki yapidan  birinin iicnde dolasip
        //lessonProgramRequest in icindeki herhangi bir programin existLessonProgram in icindeki herhangi bir lessonProgram ile cakisma(gunler ve saatler) durumunda exception firlattik
 
- /*
+
+
+}
+
+
+/*
  GENEL NOT :
  CheckLessonProgram methodumd gelen parametreler --> mevcuttaki dersProgramini ve talep edilen ders programini aliyor
  if icinde --> mevduttaki leessonProgramin ici bossa (ilk paramtre) ve talep edilen ders programlarinin bulundugu 2. paramtre 1 den fazla ders programi iceriyorsa
@@ -82,5 +87,3 @@ public class DateTimeValidator {
 
 
   */
-
-}

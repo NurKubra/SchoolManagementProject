@@ -18,14 +18,12 @@ public class ErrorMessages { //Application'inin herhangi bir yerinde kullancagim
 
     public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: User with email %s is already registered";
 
-
     public static final String ROLE_NOT_FOUND = "Error: There is no role like that, check the database";
 
     public static final String NOT_FOUND_USER_MESSAGE = "Error: User not found with id %s";
 
 
     public static final String NOT_PERMITTED_METHOD_MESSAGE = "Error: You don't have any permission to do this operation";
-
 
     public static final String ROLE_ALREADY_EXIST = "Error: Role already exist in DB";
 
@@ -55,6 +53,8 @@ public class ErrorMessages { //Application'inin herhangi bir yerinde kullancagim
     public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO = "Error: Lesson Program not found with this field";
 
     public static final String LESSON_PROGRAM_ALREADY_EXIST = "Error: Course schedule can't be selected for the same hour and date";
+
+    public static final String NOT_FOUND_ADVISOR_MESSAGE = "Error: Advisor Teacher not found with id %s";
 
 
 

@@ -13,6 +13,7 @@ import com.schoolmanagement.payload.response.TeacherResponse;
 import com.schoolmanagement.repository.user.TeacherRepository;
 import com.schoolmanagement.service.business.LessonProgramService;
 import com.schoolmanagement.service.helper.PageableHelper;
+import com.schoolmanagement.service.validator.DateTimeValidator;
 import com.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ public class TeacherService {
     private final  UserRoleService userRoleService ;
     private final PasswordEncoder passwordEncoder;
     private final PageableHelper pageableHelper;
+    private final DateTimeValidator dateTimeValidator;
 
     // Not :  Save() *********************************************************
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest) {
@@ -167,14 +169,24 @@ public class TeacherService {
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());  //varsa geliyor yoksa yoksa exception frilatiyor
         //buraya kadar hem teacher'lar hem de lessonProgramlar db de var mi diye kontrol ediyoruz !!
 
-        //eski ogretmen icin yeni bir dersin programini ekleyeceksek o zaman var olan lessonProgramlar ile cakisip cakismadigini kontrol ederiz
-        //yeni ogretmen icin ise eklencek olan lessonProgram kontrolu yapilir.
+        // !!! teacherin mevcut ders programini aliyoruz
+        Set<LessonProgram> teachersLessonProgram =  teacher.getLessonsProgramList();
 
+        // LessonProgram cakisma kontrolu
+        dateTimeValidator.checkLessonPrograms(teachersLessonProgram, lessonPrograms);
+        teachersLessonProgram.addAll(lessonPrograms);            //cakisma yoksa mevcut ogretmin mevcut ders programina yenilerini eklyiorum
+        teacher.setLessonsProgramList(teachersLessonProgram);    //Corejava tarafinda gunceleme yaptik o yuzden burda teacher uzerinde de gunceliiyorum
 
+        Teacher updatedTeacher = teacherRepository.save(teacher);  //putMapping ile yapsaydik her seyi yeniden setlemek gerekirdi
 
-
-
-
+        return ResponseMessage.<TeacherResponse>builder()
+                .message(SuccessMessages.LESSON_PROGRAM_ADD_TO_TEACHER)
+                .httpStatus(HttpStatus.OK)
+                .object(teacherMapper.mapTeacherToTeacherResponse(updatedTeacher))
+                .build();
     }
+
+    //eski ogretmen icin yeni bir dersin programini ekleyeceksek o zaman var olan lessonProgramlar ile cakisip cakismadigini kontrol ederiz
+    //yeni ogretmen icin ise eklencek olan lessonProgram kontrolu yapilir.
 
 }
