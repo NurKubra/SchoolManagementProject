@@ -19,4 +19,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Teacher findByUsernameEquals(String username);
 
     List<Teacher> getTeachersByNameContaining(String teacherName);
+
+    Teacher getTeacherByUsername(String username);
 }

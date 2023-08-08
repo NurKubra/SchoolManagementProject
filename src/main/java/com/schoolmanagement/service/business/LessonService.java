@@ -77,7 +77,7 @@ public class LessonService {
     }
     //yukardaki methodu id uzerinden name ulasip kullanabiliriz ama yoksa herhangi bir data donemez ve silemez
 
-    private Lesson isLessonExistById(Long id) {
+    public Lesson isLessonExistById(Long id) {
 
         return lessonRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE, id)));

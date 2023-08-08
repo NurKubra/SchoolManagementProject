@@ -54,6 +54,7 @@ public class SuccessMessages {
 
     public static final String LESSON_PROGRAM_DELETE = "Lesson Program is Deleted Successfully";
 
+    public static final String LESSON_PROGRAM_ADD_TO_STUDENT = "Lesson Program added to Student Successfully";
 
     //!!! Teacher
     public static final String TEACHER_SAVE = "Teacher is Saved Successfully";
@@ -68,6 +69,14 @@ public class SuccessMessages {
 
     //!!! AdvisoryTeacher
     public static final String ADVISOR_TEACHER_DELETE = "Advisor Teacher is Deleted Successfully";
+
+    //!!! Student
+    public static final String STUDENT_SAVE = "Student is Saved Successfully";
+    public static final String STUDENT_UPDATE = "Student is Updated Successfully";
+
+    public static final String STUDENT_DELETE = "Student is Deleted Successfully";
+
+
 
 
 

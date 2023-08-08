@@ -48,5 +48,5 @@ public class AdvisoryTeacherController {
 
 
     //save() methodu yok cunku --> controller katimdaki methodlarim bana gelen requestleri gosteriyor
-    //save() diye bir methoda ihtiyacim var onu service de yazacagiz
+    //save() diye bir methoda ihtiyacim controler kisminda yok ama diger ihtiyacim olcagi icin onu service de yazacagiz
 }
