@@ -76,6 +76,10 @@ public class SuccessMessages {
 
     public static final String STUDENT_DELETE = "Student is Deleted Successfully";
 
+    //!! StudentInfo
+
+    public static final String STUDENT_INFO_SAVE = "Student Info is Saved Successfully";
+
 
 
 
