@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UpdateStudentInfoRequest {
+public class UpdateStudentInfoRequest {  //studentId yi icermeyen request clasim
     @NotNull(message = "Please select education term")
     private Long educationTermId;
 

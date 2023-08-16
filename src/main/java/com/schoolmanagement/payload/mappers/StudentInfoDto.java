@@ -22,14 +22,16 @@ public class StudentInfoDto {
     public StudentInfo mapStudentInfoRequestToStudentInfo(StudentInfoRequest studentInfoRequest, Note note , Double average){
 
         return StudentInfo.builder()
-                .infoNote(studentInfoRequest.getInfoNote())
+                .infoNote(studentInfoRequest.getInfoNote())   //request de var
                 .absentee(studentInfoRequest.getAbsentee())
                 .midtermExam(studentInfoRequest.getMidtermExam())
                 .finalExam(studentInfoRequest.getFinalExam())
-                .examAverage(average)
-                .letterGrade(note)
+                .examAverage(average)                        //pojoda var dto da yok
+                .letterGrade(note)                           //pojoda var dto da yok
                 .build();
     }
+    //islemlerimi daha kolay yapmak icin requestin kendisinin yaninda tekrar islem yapmamak icin ogrrencinin harf notunun bilgisinin hesaplanmis halini
+    //notun yuzdeliklerinin alinmis halini alyioruz
 
     // !!! POJO --> DTO
     public StudentInfoResponse mapStudentInfoToStudentInfoResponse(StudentInfo studentInfo){
@@ -46,7 +48,7 @@ public class StudentInfoDto {
                 .infoNote(studentInfo.getInfoNote())
                 .note(studentInfo.getLetterGrade())
                 .average(studentInfo.getExamAverage())
-                .studentResponse(studentMapper.mapStudentToStudentResponse(studentInfo.getStudent()))
+                .studentResponse(studentMapper.mapStudentToStudentResponse(studentInfo.getStudent()))  //studentInfo uzerinden stuenti cegirinca respponse a donmek yerine pojo done rbu yuzden response dönen methodu cagirdik
                 .build();
     }
 
@@ -69,4 +71,5 @@ public class StudentInfoDto {
                 .examAverage(average)
                 .build();
     }
+    //requestdeki eksik verileri pojolardan aldik, bu sayede tüm fieldlari setlemis olduk !! --> setlemezsek null olur
 }

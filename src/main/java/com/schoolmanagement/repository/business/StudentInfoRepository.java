@@ -8,4 +8,5 @@ import java.util.List;
 public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> {
     List<StudentInfo> getAllByStudentId_Id(Long studentId);
 
+    boolean existsByIdEquals(Long id);  //kontrol et !!
 }

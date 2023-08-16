@@ -74,7 +74,8 @@ public class StudentController {
         return studentService.findStudentByName(studentName);
     }
 
-    //clientside pageing ya da serverside pageing yapilabilir ? -->
+    //client side pageing ya da server side pageing yapilabilir ? --> frontend kisminda pageable yapiya cevirme (clinet side)
+    //biz server side pageing yaptik
 
     // Not: getAllWithPage ***********************************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
@@ -102,15 +103,23 @@ public class StudentController {
     //getAtribute a alternatif bir yolla yaziyoruz
     //username i burda henuz setlemedik bunu postmande yapiyoruz
     //header icinde gondermek guvenligi sagliyor username direk gozukmuyor
+    //yetkilendirmesine admin ve teacher yaptik
+    //requestin attribute'una ulasmak icin HttpServletRequest cagiriyorum.
+    //requestin header kismindaki key degeri username olan degeri getir demek --> herhangi bir kullanicinin username i gelmis oluyor
+    //bu header dan username gelebilmesi icin simdilik postmanin header kisminda setleyecegiz --> bu sayede burda get ile getirebildik
 
     // Not: GetAllByAdvisoryTeacherUserName() ************************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
     @GetMapping("/getAllByAdvisorId")  // http://localhost:8080/students/getAllByAdvisorId +  GET
     public List<StudentResponse> getAllByAdvisoryTeacherUserName(HttpServletRequest request){
-        String userName = request.getHeader("username");
+        String userName = request.getHeader("username");        //normalde bunu service katmaninda yazmak best practice!
         return studentService.getAllByAdvisoryTeacherUserName(userName);
 
     }
+
+    //ogrenci kendi lesson programina yeni bir lessonProgram ekliyor
+    //currenti login olan bir kullanici icin yaziypruz
+    //ögrencinin kendisini ya da lessonProgram donulebilir biz ogrenci donuyoruz
 
     // Not: addLessonProgramToStudentLessonsProgram() *************************
     @PreAuthorize("hasAnyAuthority('STUDENT')")

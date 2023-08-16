@@ -111,7 +111,7 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    // Not: Update() *************************************************************
+
     // Not: Update() *************************************************************
     public ResponseMessage<StudentResponse> updateStudent(Long studentId, StudentRequest studentRequest) {
         Student student = isStudentExist(studentId);
@@ -166,26 +166,36 @@ public class StudentService {
 
     // Not : getById() ********************************************************
     public Student getStudentById(Long id) {
-        return isStudentExist(id); //direk Student donuyor zaten
+        return isStudentExist(id); //direk Student donuyor zaten POJO halde
     }
 
     // Not: GetAllByAdvisoryTeacherUserName() ************************************************
     public List<StudentResponse> getAllByAdvisoryTeacherUserName(String advisoryTeacherUserName) {
 
-        return studentRepository.getStudentByAdvisoryTeacher_Username(advisoryTeacherUserName)
+        return studentRepository.getStudentByAdvisoryTeacher_Username(advisoryTeacherUserName) //username ile calistigimizdan _useername yazdik
                 .stream()
                 .map(studentMapper::mapStudentToStudentResponse)
                 .collect(Collectors.toList());
     }
 
+
+
+
     // Not: addLessonProgramToStudentLessonsProgram() *************************
     public ResponseMessage<StudentResponse> chooseLesson(String userName, ChooseLessonProgramWithId chooseLessonProgramWithId) {
+        //username kontrolü (bu username li bir ogrenci var mi)
         Student student = isStudentExistByUsername(userName);
+        //requestden gelen eklenmek istenen lessonProgram id kontrolü
         Set<LessonProgram> lessonProgramSet = lessonProgramService.getLessonProgramById(chooseLessonProgramWithId.getLessonProgramId());
+        //ogrenicinin mevcutta olan lessonprogramlarini alip duplicate olmasini önlüyorum
         Set<LessonProgram> studentCurrentLessonProgram = student.getLessonsProgramList();
+        //dublicate i burda kontrol ediyoruz--> eklenmesini istedigim ve mevcutta olan lessonProgramlari kontorl ediyorum
         dateTimeValidator.checkLessonPrograms(studentCurrentLessonProgram,lessonProgramSet);
+        //cakisma yoksa yeni gelen lessonProgramlari mevcuttakilere ekledik
         studentCurrentLessonProgram.addAll(lessonProgramSet);
+        //core java tarfinda lessonProgram guncellendi
         student.setLessonsProgramList(studentCurrentLessonProgram);
+        //db de lessonProgram guncelendi
         Student savedStudent = studentRepository.save(student);
 
         return ResponseMessage.<StudentResponse>builder()
@@ -195,15 +205,17 @@ public class StudentService {
                 .build();
 
     }
-    //username var mi kontrolü--> login olan kisinin username i zaten db de mevcut olmasi lazim ama aradan zaman gecerse basak user giris yapmis olabilir
+
+    //username var mi kontrolü--> login olan kisinin username i zaten db de mevcut olmasi lazim ama aradan zaman gecerse baska
+    //user giris yapmis olabilir
     //gaarnti olsun diye kontrol ediyoruz
     //requestden gelen ile mevcutta olan lessonProgramlari aldim ve onceden yazdigimiz method ile cakisma var mi diye kontrol ediyorum
     //kontrol ettiktan sonra cakisma yoksa mevcut olan listeye yeni listeyi ekeldik addAll() ile
     //student clasinda lessonProgrammList i setledim ve db ye kaydetttim
-    //
+
     public  Student isStudentExistByUsername(String username){
-        Student student = studentRepository.findByUsernameEquals(username);
-        if(student.getId()==null){
+        Student student = studentRepository.findByUsernameEquals(username);   //arguman olarak gonderdigim username i sahip ogrenciyi dön!!
+        if(student.getId()==null){                                            //optional yapmadigim icin null olup olmadigini kontrol etmem lazim, id yi kontrol ediyorum
             throw  new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER_MESSAGE);
         }
         return  student;
